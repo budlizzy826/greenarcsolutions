@@ -392,7 +392,7 @@ button:focus-visible {
 .hero-bg {
     position: absolute;
     inset: 0;
-    background: #0a0f08;
+    background: #132e0a;
     z-index: -1;
 }
 
@@ -411,7 +411,7 @@ button:focus-visible {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(6, 10, 4, 0.6) 100%);
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(12, 24, 6, 0.4) 100%);
     z-index: 2;
 }
 
@@ -420,7 +420,7 @@ button:focus-visible {
     position: absolute;
     border-radius: 50%;
     filter: blur(70px);
-    opacity: 0.75;
+    opacity: 0.85;
     z-index: 0;
 }
 
