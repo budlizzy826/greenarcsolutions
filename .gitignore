@@ -1,0 +1,12 @@
+# Source assets (not needed for deployment)
+GreenArc Solutions Logos/
+Claude.md File.pdf
+
+# Deploy folder (generated)
+deploy/
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.claude/
