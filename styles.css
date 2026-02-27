@@ -48,6 +48,7 @@
     --text-2xl:  clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
     --text-3xl:  clamp(1.875rem, 1.4rem + 2.4vw, 3rem);
     --text-4xl:  clamp(2.25rem, 1.5rem + 3.75vw, 4rem);
+    --text-5xl:  clamp(2.75rem, 1.8rem + 4.75vw, 5rem);
 
     /* Spacing */
     --header-height: 80px;
@@ -242,16 +243,16 @@ button:focus-visible {
     left: 0;
     right: 0;
     z-index: 1000;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
     height: var(--header-height);
-    background-color: rgba(234, 245, 216, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: transparent;
 }
 
 .header-scrolled {
     background-color: var(--white);
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .header-scrolled .nav-links a {
@@ -265,10 +266,6 @@ button:focus-visible {
 
 .header-scrolled .nav-links .nav-cta {
     color: var(--white);
-}
-
-.header-scrolled .nav-logo img {
-    filter: none;
 }
 
 .nav-container {
@@ -285,6 +282,7 @@ button:focus-visible {
     height: 48px;
     width: auto;
     transition: filter 0.3s ease;
+    filter: brightness(2) saturate(0.7);
 }
 
 .header-scrolled .nav-logo img {
@@ -300,7 +298,7 @@ button:focus-visible {
 .nav-links a {
     font-weight: 500;
     font-size: var(--text-sm);
-    color: var(--gray-700);
+    color: rgba(255, 255, 255, 0.9);
     position: relative;
     transition: color 0.2s ease;
 }
@@ -312,8 +310,13 @@ button:focus-visible {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--green-400);
+    background: var(--green-300);
     transition: width 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--white);
 }
 
 .nav-links a:hover::after,
@@ -352,7 +355,7 @@ button:focus-visible {
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--gray-700);
+    background: var(--white);
     position: relative;
     transition: background 0.2s ease;
 }
@@ -364,8 +367,8 @@ button:focus-visible {
     left: 0;
     width: 24px;
     height: 2px;
-    background: var(--gray-700);
-    transition: transform 0.3s ease;
+    background: var(--white);
+    transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .hamburger::before { top: -7px; }
@@ -394,129 +397,72 @@ button:focus-visible {
 .hero-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, #eaf5d8 0%, #d4eda0 30%, #c2e88a 60%, #e0ffab 100%);
+    background: url('assets/images/hero-bg.jpg') center/cover no-repeat;
     z-index: -1;
 }
 
-/* Circuit-style grid pattern */
+/* Dark green overlay */
 .hero-bg::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(40, 117, 15, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(40, 117, 15, 0.06) 1px, transparent 1px),
-        linear-gradient(rgba(40, 117, 15, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(40, 117, 15, 0.03) 1px, transparent 1px);
-    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background: linear-gradient(160deg, rgba(26, 58, 8, 0.88) 0%, rgba(40, 117, 15, 0.78) 50%, rgba(26, 58, 8, 0.92) 100%);
     z-index: 1;
 }
 
-/* Soft gradient wash for depth */
-.hero-bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(ellipse at 20% 50%, rgba(40, 117, 15, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 30%, rgba(78, 140, 26, 0.06) 0%, transparent 40%),
-        radial-gradient(ellipse at 50% 90%, rgba(141, 198, 63, 0.08) 0%, transparent 40%);
-    z-index: 2;
-}
-
-/* Decorative geometric shapes */
+/* Hide decorative orbs (not needed with photo bg) */
 .hero-orb {
-    position: absolute;
-    z-index: 0;
-}
-
-/* Large ring - top right */
-.hero-orb--1 {
-    width: 400px;
-    height: 400px;
-    border: 2px solid rgba(40, 117, 15, 0.08);
-    border-radius: 50%;
-    top: -8%;
-    right: -5%;
-    animation: orbFloat1 20s ease-in-out infinite;
-}
-
-/* Small filled circle */
-.hero-orb--2 {
-    width: 12px;
-    height: 12px;
-    background: rgba(40, 117, 15, 0.12);
-    border-radius: 50%;
-    bottom: 25%;
-    left: 10%;
-    animation: orbFloat2 14s ease-in-out infinite;
-}
-
-/* Medium ring - bottom left */
-.hero-orb--3 {
-    width: 250px;
-    height: 250px;
-    border: 1.5px solid rgba(40, 117, 15, 0.06);
-    border-radius: 50%;
-    bottom: -5%;
-    left: -3%;
-    animation: orbFloat3 18s ease-in-out infinite;
-}
-
-/* Diagonal accent line */
-.hero-orb--4 {
-    width: 200px;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, rgba(40, 117, 15, 0.1), transparent);
-    top: 30%;
-    right: 8%;
-    transform: rotate(-25deg);
-    animation: orbFloat4 16s ease-in-out infinite;
-}
-
-@keyframes orbFloat1 {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(-20px, 30px) rotate(15deg); }
-}
-
-@keyframes orbFloat2 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(20px, -15px); }
-}
-
-@keyframes orbFloat3 {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(30px, -20px) rotate(-10deg); }
-}
-
-@keyframes orbFloat4 {
-    0%, 100% { transform: rotate(-25deg) scaleX(1); }
-    50% { transform: rotate(-25deg) scaleX(1.3) translateY(10px); }
+    display: none;
 }
 
 .hero-content {
     text-align: center;
-    max-width: 750px;
-    animation: heroFadeIn 1s ease forwards;
+    max-width: 800px;
 }
+
+/* Staggered hero entrance */
+.hero-stagger {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: heroFadeIn 0.8s ease forwards;
+}
+
+.hero-stagger:nth-child(1) { animation-delay: 0.1s; }
+.hero-stagger:nth-child(2) { animation-delay: 0.3s; }
+.hero-stagger:nth-child(3) { animation-delay: 0.5s; }
+.hero-stagger:nth-child(4) { animation-delay: 0.7s; }
 
 .hero-logo {
     width: 280px;
     max-width: 80%;
     margin: 0 auto 2rem;
+    filter: brightness(2) saturate(0.8) drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3));
 }
 
 .hero h1 {
-    color: var(--green-900);
+    font-size: var(--text-5xl);
+    color: var(--white);
     margin-bottom: 1.25rem;
     letter-spacing: -0.02em;
 }
 
 .hero-subtitle {
-    color: var(--gray-700);
+    color: rgba(255, 255, 255, 0.85);
     font-size: var(--text-lg);
     max-width: 580px;
     margin: 0 auto 2.5rem;
+}
+
+/* Hero buttons on dark bg */
+.hero .btn-outline {
+    color: var(--white);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero .btn-outline:hover {
+    background: var(--white);
+    color: var(--green-800);
+    border-color: var(--white);
 }
 
 .hero-actions {
@@ -553,15 +499,17 @@ button:focus-visible {
 .service-card {
     background: var(--white);
     border: 1px solid var(--gray-200);
+    border-left: 3px solid transparent;
     border-radius: 12px;
     padding: 2rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .service-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     border-color: var(--green-400);
+    border-left-color: var(--green-500);
 }
 
 .service-icon {
@@ -574,6 +522,13 @@ button:focus-visible {
     justify-content: center;
     color: var(--green-600);
     margin-bottom: 1.5rem;
+    transition: background-color 0.4s ease, color 0.4s ease, transform 0.4s ease;
+}
+
+.service-card:hover .service-icon {
+    background: var(--green-500);
+    color: var(--white);
+    transform: scale(1.08);
 }
 
 .service-card h3 {
@@ -609,6 +564,72 @@ button:focus-visible {
     background: var(--green-400);
     border-radius: 50%;
 }
+
+/* ===========================
+   9b. STATS SECTION
+   =========================== */
+.stats {
+    background: var(--green-900);
+    padding: clamp(2.5rem, 5vw, 4.5rem) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(107, 171, 46, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(141, 198, 63, 0.1) 0%, transparent 40%);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-item {
+    padding: 1rem;
+}
+
+.stat-value {
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--green-300);
+    line-height: 1;
+}
+
+.stat-prefix,
+.stat-suffix {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--green-400);
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+/* Stagger stat items */
+.stats-grid .stat-item:nth-child(2) .fade-in,
+.stats-grid .fade-in:nth-child(2) { transition-delay: 0.1s; }
+.stats-grid .fade-in:nth-child(3) { transition-delay: 0.2s; }
+.stats-grid .fade-in:nth-child(4) { transition-delay: 0.3s; }
 
 /* ===========================
    10. ABOUT SECTION
@@ -893,7 +914,8 @@ button:focus-visible {
         scroll-behavior: auto !important;
     }
 
-    .fade-in {
+    .fade-in,
+    .hero-stagger {
         opacity: 1;
         transform: none;
     }
@@ -964,6 +986,10 @@ button:focus-visible {
         grid-template-columns: 1fr 1fr;
     }
 
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     .about-content {
         grid-template-columns: 3fr 2fr;
         gap: 4rem;
@@ -1004,6 +1030,12 @@ button:focus-visible {
 
     .hero h1 {
         letter-spacing: -0.03em;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle {
+        font-size: var(--text-xl);
+        max-width: 640px;
     }
 }
 

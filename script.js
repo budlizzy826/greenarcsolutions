@@ -84,6 +84,41 @@
     fadeElements.forEach(el => fadeObserver.observe(el));
 
     // ===========================
+    // Animated stat counters
+    // ===========================
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+
+    function animateCounter(el, target) {
+        const duration = 2000;
+        const start = performance.now();
+
+        function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(target * eased);
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.dataset.target);
+                animateCounter(entry.target, target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => counterObserver.observe(counter));
+
+    // ===========================
     // Contact form (Formspree AJAX)
     // ===========================
     const form = document.getElementById('contactForm');
