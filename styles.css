@@ -466,11 +466,25 @@ button:focus-visible {
     letter-spacing: -0.02em;
 }
 
+.hero-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: var(--text-sm);
+    color: var(--green-300);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
 .hero-subtitle {
     color: rgba(255, 255, 255, 0.85);
     font-size: var(--text-lg);
     max-width: 580px;
     margin: 0 auto 2.5rem;
+}
+
+.hero-subtitle--detail {
+    max-width: 680px;
+    margin-bottom: 0.75rem;
 }
 
 /* Hero buttons on dark bg */
