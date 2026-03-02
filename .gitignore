@@ -5,6 +5,9 @@ Claude.md File.pdf
 # Deploy folder (generated)
 deploy/
 
+# Internal tools (separate repos)
+greenarcsolutions-outreach/
+
 # IDE / OS
 .DS_Store
 Thumbs.db

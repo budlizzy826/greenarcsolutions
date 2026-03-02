@@ -585,6 +585,26 @@ button:focus-visible {
     border-radius: 50%;
 }
 
+.services-grid--three {
+    grid-template-columns: 1fr;
+}
+
+.service-card .btn {
+    margin-top: 1.5rem;
+}
+
+.service-card--highlight {
+    border-left-color: var(--green-500);
+    background: linear-gradient(135deg, var(--slate-50) 0%, var(--white) 100%);
+}
+
+.contact-note {
+    margin-top: 1rem;
+    font-size: var(--text-sm);
+    color: var(--gray-500);
+    font-style: italic;
+}
+
 /* ===========================
    9b. STATS SECTION
    =========================== */
@@ -1689,8 +1709,8 @@ button:focus-visible {
         grid-template-columns: 1fr 1fr;
     }
 
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .services-grid--three {
+        grid-template-columns: 1fr 1fr;
     }
 
     .about-content {
@@ -1727,6 +1747,10 @@ button:focus-visible {
 
 /* Desktop */
 @media (min-width: 1024px) {
+    .services-grid--three {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     .hero-logo {
         width: 320px;
     }
