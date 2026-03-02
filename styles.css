@@ -1220,6 +1220,64 @@ button:focus-visible {
     color: var(--white);
 }
 
+/* Agent Groups */
+.agents-group {
+    margin-top: 3.5rem;
+}
+
+.agents-group:first-child {
+    margin-top: 3rem;
+}
+
+.agents-group-header {
+    margin-bottom: 2rem;
+}
+
+.agents-group-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.agents-group-label h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--slate-800);
+}
+
+.agents-group-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 100px;
+    background: var(--slate-100);
+    color: var(--slate-500);
+}
+
+.agents-group-header p {
+    font-size: var(--text-base);
+    color: var(--gray-500);
+    line-height: 1.6;
+    max-width: 640px;
+}
+
+/* Pricing Addon */
+.pricing-addon {
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--slate-400);
+    margin-top: 2rem;
+    line-height: 1.6;
+}
+
+.pricing-addon strong {
+    color: var(--green-300);
+}
+
 /* Pricing Section */
 .ai-pricing {
     padding: clamp(3rem, 6vw, 6rem) 0;
@@ -1245,8 +1303,8 @@ button:focus-visible {
 
 .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
     margin-top: 3.5rem;
 }
 
@@ -1535,7 +1593,7 @@ button:focus-visible {
     }
 
     .pricing-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .ind-grid {
@@ -1553,6 +1611,10 @@ button:focus-visible {
     }
 
     .ind-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pricing-grid {
         grid-template-columns: 1fr;
     }
 
