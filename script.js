@@ -189,6 +189,8 @@
                 const leadData = {
                     name: formData.get('name'),
                     email: formData.get('email'),
+                    phone: formData.get('phone') || null,
+                    company: formData.get('company') || null,
                     service_interest: formData.get('service') || null,
                     message: formData.get('message'),
                     source_page: sourcePage

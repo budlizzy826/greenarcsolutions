@@ -773,6 +773,11 @@ button:focus-visible {
     color: var(--gray-700);
 }
 
+.optional-label {
+    font-weight: 400;
+    color: var(--slate-400);
+}
+
 .form-group input,
 .form-group select,
 .form-group textarea {
