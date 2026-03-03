@@ -202,7 +202,25 @@
 
                 if (error) throw error;
 
-                formStatus.textContent = 'Message sent! We\'ll be in touch soon.';
+                // Send to AI Lead Response Agent (non-blocking)
+                if (leadData.phone) {
+                    fetch('https://n8n.greenarcsolutions.com/webhook/lead-intake', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Webhook-Secret': 'a2d08b11e0f45be255becfc4e93af8056202b1b38bbc67a5411ad1d41094d1e8'
+                        },
+                        body: JSON.stringify({
+                            name: leadData.name,
+                            email: leadData.email,
+                            phone: leadData.phone,
+                            message: leadData.message,
+                            source: 'greenarcsolutions.com'
+                        })
+                    }).catch(() => {}); // Fire-and-forget
+                }
+
+                formStatus.textContent = 'Message sent! You\'ll receive a text within 60 seconds.';
                 formStatus.classList.add('form-success');
                 form.reset();
             } catch (err) {
