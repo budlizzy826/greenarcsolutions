@@ -119,9 +119,37 @@
     counters.forEach(counter => counterObserver.observe(counter));
 
     // ===========================
-    // Contact form (Formspree AJAX)
+    // Supabase initialization
     // ===========================
-    function initContactForm(formId, statusId) {
+    let supabaseClient = null;
+    let supabaseReady = false;
+
+    async function initSupabase() {
+        try {
+            const res = await fetch('/api/config');
+            if (!res.ok) throw new Error('Config fetch failed');
+            const config = await res.json();
+
+            if (!config.supabaseUrl || !config.supabaseAnonKey) {
+                throw new Error('Missing Supabase config');
+            }
+
+            supabaseClient = window.supabase.createClient(
+                config.supabaseUrl,
+                config.supabaseAnonKey
+            );
+            supabaseReady = true;
+        } catch (err) {
+            console.error('Supabase init failed:', err);
+        }
+    }
+
+    initSupabase();
+
+    // ===========================
+    // Contact form (Supabase)
+    // ===========================
+    function initContactForm(formId, statusId, sourcePage) {
         const form = document.getElementById(formId);
         const formStatus = document.getElementById(statusId);
         if (!form || !formStatus) return;
@@ -136,21 +164,47 @@
             formStatus.textContent = '';
             formStatus.className = 'form-status';
 
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                    headers: { 'Accept': 'application/json' }
-                });
+            // Honeypot check — fake success to fool bots
+            const honeypot = form.querySelector('input[name="_gotcha"]');
+            if (honeypot && honeypot.value) {
+                formStatus.textContent = 'Message sent! We\'ll be in touch soon.';
+                formStatus.classList.add('form-success');
+                form.reset();
+                btn.disabled = false;
+                btn.textContent = originalText;
+                return;
+            }
 
-                if (response.ok) {
-                    formStatus.textContent = 'Message sent! We\'ll be in touch soon.';
-                    formStatus.classList.add('form-success');
-                    form.reset();
-                } else {
-                    throw new Error('Submission failed');
-                }
-            } catch {
+            if (!supabaseReady || !supabaseClient) {
+                formStatus.textContent =
+                    'Something went wrong. Please try again or email us directly.';
+                formStatus.classList.add('form-error');
+                btn.disabled = false;
+                btn.textContent = originalText;
+                return;
+            }
+
+            try {
+                const formData = new FormData(form);
+                const leadData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    service_interest: formData.get('service') || null,
+                    message: formData.get('message'),
+                    source_page: sourcePage
+                };
+
+                const { error } = await supabaseClient
+                    .from('leads')
+                    .insert([leadData]);
+
+                if (error) throw error;
+
+                formStatus.textContent = 'Message sent! We\'ll be in touch soon.';
+                formStatus.classList.add('form-success');
+                form.reset();
+            } catch (err) {
+                console.error('Form submission error:', err);
                 formStatus.textContent =
                     'Something went wrong. Please try again or email us directly.';
                 formStatus.classList.add('form-error');
@@ -161,8 +215,8 @@
         });
     }
 
-    initContactForm('contactForm', 'formStatus');
-    initContactForm('aiContactForm', 'aiFormStatus');
+    initContactForm('contactForm', 'formStatus', 'homepage');
+    initContactForm('aiContactForm', 'aiFormStatus', 'ai-assistants');
 
     // ===========================
     // Dynamic copyright year
