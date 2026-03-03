@@ -5,8 +5,15 @@ Claude.md File.pdf
 # Deploy folder (generated)
 deploy/
 
-# Internal tools (separate repos)
+# Source assets (duplicates in assets/)
+greenarc-og.png
+
+# Internal / confidential documents
 greenarcsolutions-outreach/
+market-analysis.html
+agentic-solutions-catalog.html
+agent-factory-architecture.html
+greenarcsolutions-ai-agents-page.html
 
 # IDE / OS
 .DS_Store

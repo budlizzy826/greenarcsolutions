@@ -121,42 +121,48 @@
     // ===========================
     // Contact form (Formspree AJAX)
     // ===========================
-    const form = document.getElementById('contactForm');
-    const formStatus = document.getElementById('formStatus');
+    function initContactForm(formId, statusId) {
+        const form = document.getElementById(formId);
+        const formStatus = document.getElementById(statusId);
+        if (!form || !formStatus) return;
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        const btn = form.querySelector('button[type="submit"]');
-        const originalText = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = 'Sending...';
-        formStatus.textContent = '';
-        formStatus.className = 'form-status';
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            formStatus.textContent = '';
+            formStatus.className = 'form-status';
 
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
-            });
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'Accept': 'application/json' }
+                });
 
-            if (response.ok) {
-                formStatus.textContent = 'Message sent! We\'ll be in touch soon.';
-                formStatus.classList.add('form-success');
-                form.reset();
-            } else {
-                throw new Error('Submission failed');
+                if (response.ok) {
+                    formStatus.textContent = 'Message sent! We\'ll be in touch soon.';
+                    formStatus.classList.add('form-success');
+                    form.reset();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch {
+                formStatus.textContent =
+                    'Something went wrong. Please try again or email us directly.';
+                formStatus.classList.add('form-error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
             }
-        } catch {
-            formStatus.textContent =
-                'Something went wrong. Please try again or email us directly.';
-            formStatus.classList.add('form-error');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
-        }
-    });
+        });
+    }
+
+    initContactForm('contactForm', 'formStatus');
+    initContactForm('aiContactForm', 'aiFormStatus');
 
     // ===========================
     // Dynamic copyright year
