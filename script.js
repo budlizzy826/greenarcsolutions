@@ -186,6 +186,10 @@
 
             try {
                 const formData = new FormData(form);
+                // SMS consent — proof-of-consent record (checkbox is required, so this is true on submit)
+                const smsConsent = form.querySelector('input[name="sms_consent"]')?.checked || false;
+                const consentTimestamp = new Date().toISOString();
+
                 const leadData = {
                     name: formData.get('name'),
                     email: formData.get('email'),
@@ -215,7 +219,9 @@
                             email: leadData.email,
                             phone: leadData.phone,
                             message: leadData.message,
-                            source: 'greenarcsolutions.com'
+                            source: 'greenarcsolutions.com',
+                            sms_consent: smsConsent,
+                            consent_timestamp: consentTimestamp
                         })
                     }).catch(() => {}); // Fire-and-forget
                 }

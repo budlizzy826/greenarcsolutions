@@ -346,6 +346,10 @@
                             <label for="message">Tell us about your business</label>
                             <textarea id="message" name="message" rows="5" required placeholder="What does your business do? What's your biggest bottleneck right now?"></textarea>
                         </div>
+                        <div class="form-consent">
+                            <input type="checkbox" id="smsConsent" name="sms_consent" required />
+                            <label for="smsConsent">I agree to receive text messages from GreenArc Solutions regarding my inquiry. Message frequency varies. Message &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help. See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>.</label>
+                        </div>
                         <!-- Honeypot spam protection -->
                         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
                         <button type="submit" class="btn btn-primary btn-full">Send My Info &rarr;</button>
@@ -402,6 +406,8 @@
                 <a href="ai-agents">AI Assistants</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms</a>
             </nav>
             <div class="footer-bottom">
                 <p>&copy; <span id="currentYear"></span> GreenArc Solutions LLC. All rights reserved.</p>
