@@ -27,10 +27,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body class="legal-page">
     <!-- Skip to main content -->
@@ -39,18 +39,17 @@
     <!-- Header / Navigation -->
     <header class="site-header" id="header">
         <nav class="nav-container" aria-label="Main navigation">
-            <a href="/" class="nav-logo">
-                <img src="assets/images/fulllogo_transparent_nobuffer.png" alt="GreenArc Solutions" />
+            <a href="/" class="nav-logo" aria-label="GreenArc Solutions home">
+                <img src="assets/images/fulllogo_transparent_nobuffer.png" alt="GreenArc Solutions" width="66" height="40" />
             </a>
             <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
                 <span class="hamburger"></span>
             </button>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
-                <li><a href="/#services">Services</a></li>
-                <li><a href="ai-agents">AI Assistants</a></li>
-                <li><a href="/#about">About</a></li>
-                <li><a href="/#contact" class="nav-cta">Get in Touch</a></li>
+                <li><a href="/websites">Websites</a></li>
+                <li><a href="/ai-agents">AI Assistant</a></li>
+                <li><a href="/#contact" class="nav-cta">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -137,22 +136,24 @@
 
     <!-- Footer -->
     <footer class="site-footer">
-        <div class="container footer-content">
-            <div class="footer-brand">
-                <img src="assets/images/fulllogo_transparent_nobuffer.png" alt="GreenArc Solutions" class="footer-logo" loading="lazy" decoding="async" />
-                <p>AI assistants that run your business operations. Live in days, not months.</p>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="assets/images/fulllogo_transparent_nobuffer.png" alt="GreenArc Solutions" class="footer-logo" width="63" height="38" loading="lazy" decoding="async" />
+                    <p>Fast websites and one AI assistant that answers every lead in under 60 seconds. Fully managed, for small businesses.</p>
+                </div>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <a href="/">Home</a>
+                    <a href="/websites">Websites</a>
+                    <a href="/ai-agents">AI Assistant</a>
+                    <a href="/#contact">Contact</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms</a>
+                </nav>
             </div>
-            <nav class="footer-nav" aria-label="Footer navigation">
-                <a href="/">Home</a>
-                <a href="/#services">Services</a>
-                <a href="ai-agents">AI Assistants</a>
-                <a href="/#about">About</a>
-                <a href="/#contact">Contact</a>
-                <a href="/privacy">Privacy Policy</a>
-                <a href="/terms">Terms</a>
-            </nav>
             <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> GreenArc Solutions LLC. All rights reserved.</p>
+                <p class="footer-nap">GreenArc Solutions LLC &middot; Frederick, MD &middot; <a href="tel:+14434596196">(443) 459-6196</a> &middot; <a href="mailto:adam@greenarcsolutions.com">adam@greenarcsolutions.com</a></p>
+                <p class="copy">&copy; <span id="currentYear"></span> GreenArc Solutions LLC. All rights reserved.</p>
             </div>
         </div>
     </footer>
