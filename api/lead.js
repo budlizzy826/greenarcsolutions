@@ -33,7 +33,7 @@ function postToFormSubmit(payload) {
                 resp.on('end', () => {
                     let parsed = {};
                     try { parsed = JSON.parse(raw); } catch (_) {}
-                    resolve({ status: resp.statusCode, body: parsed });
+                    resolve({ status: resp.statusCode, body: parsed, raw: raw.slice(0, 300) });
                 });
             }
         );
@@ -80,10 +80,10 @@ export default async function handler(req, res) {
         const result = await postToFormSubmit(payload);
         const ok = result.body && (result.body.success === true || result.body.success === 'true');
         if (result.status < 200 || result.status >= 300 || !ok) {
-            return res.status(502).json({ ok: false, error: (result.body && result.body.message) || 'Email send failed' });
+            return res.status(502).json({ ok: false, error: (result.body && result.body.message) || 'Email send failed', debug: { status: result.status, raw: result.raw } });
         }
         return res.status(200).json({ ok: true });
     } catch (err) {
-        return res.status(502).json({ ok: false, error: 'Email send failed' });
+        return res.status(502).json({ ok: false, error: 'Email send failed', debug: { thrown: err.name + ': ' + err.message } });
     }
 }
