@@ -85,7 +85,7 @@
     }
 
     // ===========================
-    // Contact form → same-origin relay (/api/lead → n8n)
+    // Contact form → same-origin relay (/api/lead → FormSubmit email)
     // ===========================
     function initContactForm(formId, statusId, sourcePage) {
         const form = document.getElementById(formId);
