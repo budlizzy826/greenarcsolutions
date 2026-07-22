@@ -85,8 +85,11 @@
     }
 
     // ===========================
-    // Contact form → same-origin relay (/api/lead → FormSubmit email)
+    // Contact form → FormSubmit (emails the lead to Adam, submitted client-side
+    // so it passes FormSubmit's Cloudflare check; server IPs get blocked).
     // ===========================
+    const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/adam@greenarcsolutions.com';
+
     function initContactForm(formId, statusId, sourcePage) {
         const form = document.getElementById(formId);
         const formStatus = document.getElementById(statusId);
@@ -117,27 +120,34 @@
             try {
                 const formData = new FormData(form);
                 const smsConsent = form.querySelector('input[name="sms_consent"]')?.checked || false;
+                const company = formData.get('company');
+                const service = formData.get('service');
 
-                const leadData = {
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone') || null,
-                    company: formData.get('company') || null,
-                    service_interest: formData.get('service') || null,
-                    message: formData.get('message'),
-                    source_page: sourcePage,
-                    sms_consent: smsConsent,
-                    consent_timestamp: new Date().toISOString(),
-                    _gotcha: honeypot ? honeypot.value : ''
+                const payload = {
+                    _subject: 'New lead: ' + formData.get('name') + (company ? ' (' + company + ')' : ''),
+                    _template: 'table',
+                    _captcha: 'false',
+                    _replyto: formData.get('email'),
+                    Name: formData.get('name'),
+                    Email: formData.get('email'),
+                    Phone: formData.get('phone') || '',
+                    Company: company || 'Not provided',
+                    Interest: service || 'Not specified',
+                    Message: formData.get('message') || '',
+                    'SMS consent': smsConsent ? 'YES' : 'no',
+                    'Consent timestamp': new Date().toISOString(),
+                    'Source page': sourcePage
                 };
 
-                const res = await fetch('/api/lead', {
+                const res = await fetch(FORMSUBMIT_ENDPOINT, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(leadData)
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
 
-                if (!res.ok) throw new Error('Relay responded ' + res.status);
+                const result = await res.json().catch(() => ({}));
+                const ok = result.success === true || result.success === 'true';
+                if (!res.ok || !ok) throw new Error(result.message || ('FormSubmit ' + res.status));
 
                 formStatus.textContent = 'Thanks — your message is in. Adam will get back to you shortly.';
                 formStatus.classList.add('form-success');
