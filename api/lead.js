@@ -1,9 +1,13 @@
-// Same-origin lead relay.
-// The browser posts here (no CORS), and this forwards the lead to the n8n
-// webhook server-side (no browser CORS, secret never exposed to the client).
-// n8n then texts the lead back within 60s and emails the full lead to Adam.
+// Same-origin lead relay → email.
+// The browser posts here (no CORS); this emails the full lead to Adam via
+// Web3Forms (https://web3forms.com) server-side. No database, no n8n needed.
+//
+// SETUP: create a free access key at https://web3forms.com (tied to
+// adam@greenarcsolutions.com), then set WEB3FORMS_ACCESS_KEY in Vercel
+// (or paste it into ACCESS_KEY_FALLBACK below). The key is not sensitive.
 
-const N8N_WEBHOOK_URL = 'https://n8n.greenarcsolutions.com/webhook/lead-intake';
+const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+const ACCESS_KEY_FALLBACK = '32fa8104-97c2-4fc8-92bc-2aadf1aa7605'; // Web3Forms key (not sensitive; prefer WEB3FORMS_ACCESS_KEY env var)
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -12,7 +16,7 @@ export default async function handler(req, res) {
 
     const body = req.body || {};
 
-    // Honeypot — pretend success without forwarding, to fool bots.
+    // Honeypot — pretend success without sending, to fool bots.
     if (body._gotcha) {
         return res.status(200).json({ ok: true });
     }
@@ -22,37 +26,48 @@ export default async function handler(req, res) {
         return res.status(400).json({ ok: false, error: 'Missing required fields' });
     }
 
-    // Secret stays server-side. Prefer an env var; falls back to the existing
-    // value so the form keeps working. Rotate this and set N8N_WEBHOOK_SECRET.
-    const secret = process.env.N8N_WEBHOOK_SECRET
-        || 'a2d08b11e0f45be255becfc4e93af8056202b1b38bbc67a5411ad1d41094d1e8';
+    const accessKey = process.env.WEB3FORMS_ACCESS_KEY || ACCESS_KEY_FALLBACK;
+    if (!accessKey) {
+        return res.status(503).json({ ok: false, error: 'Email not configured' });
+    }
+
+    const service = body.service_interest || 'Not specified';
+    const company = body.company || 'Not provided';
+
+    const emailBody =
+        `New lead from greenarcsolutions.com\n\n` +
+        `Name:     ${body.name}\n` +
+        `Email:    ${body.email}\n` +
+        `Phone:    ${body.phone}\n` +
+        `Company:  ${company}\n` +
+        `Interest: ${service}\n\n` +
+        `Message:\n${body.message || '(none)'}\n\n` +
+        `— — —\n` +
+        `SMS consent: ${body.sms_consent === true ? 'YES' : 'no'}\n` +
+        `Consent timestamp: ${body.consent_timestamp || 'n/a'}\n` +
+        `Source page: ${body.source_page || 'n/a'}`;
 
     try {
-        const upstream = await fetch(N8N_WEBHOOK_URL, {
+        const upstream = await fetch(WEB3FORMS_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Webhook-Secret': secret
-            },
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({
-                name: body.name,
+                access_key: accessKey,
+                subject: `New lead: ${body.name}${body.company ? ' (' + body.company + ')' : ''}`,
+                from_name: 'GreenArc Website',
+                replyto: body.email,
                 email: body.email,
-                phone: body.phone,
-                company: body.company || null,
-                service: body.service_interest || null,
-                message: body.message || null,
-                source: 'greenarcsolutions.com',
-                source_page: body.source_page || null,
-                sms_consent: body.sms_consent === true,
-                consent_timestamp: body.consent_timestamp || null
+                name: body.name,
+                message: emailBody
             })
         });
 
-        if (!upstream.ok) {
-            return res.status(502).json({ ok: false, error: 'Upstream ' + upstream.status });
+        const result = await upstream.json().catch(() => ({}));
+        if (!upstream.ok || result.success === false) {
+            return res.status(502).json({ ok: false, error: result.message || 'Email send failed' });
         }
         return res.status(200).json({ ok: true });
     } catch (err) {
-        return res.status(502).json({ ok: false, error: 'Forward failed' });
+        return res.status(502).json({ ok: false, error: 'Email send failed' });
     }
 }

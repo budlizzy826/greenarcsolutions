@@ -106,7 +106,7 @@
 
             // Honeypot check — fake success to fool bots
             if (honeypot && honeypot.value) {
-                formStatus.textContent = 'Message sent! You\'ll receive a text within 60 seconds.';
+                formStatus.textContent = 'Thanks — your message is in. Adam will get back to you shortly.';
                 formStatus.classList.add('form-success');
                 form.reset();
                 btn.disabled = false;
@@ -139,7 +139,7 @@
 
                 if (!res.ok) throw new Error('Relay responded ' + res.status);
 
-                formStatus.textContent = 'Message sent! You\'ll receive a text within 60 seconds.';
+                formStatus.textContent = 'Thanks — your message is in. Adam will get back to you shortly.';
                 formStatus.classList.add('form-success');
                 form.reset();
             } catch (err) {
